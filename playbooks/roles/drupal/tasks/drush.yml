@@ -1,0 +1,24 @@
+---
+
+- name: install drush via composer and run it once
+  shell: /usr/local/bin/composer global require --no-progress --no-interaction drush/drush:6.* -d /usr/share/composer; /usr/share/composer/vendor/bin/drush
+  args:
+    creates: /usr/share/composer/vendor/bin/drush
+  sudo: true
+
+- name: make drush globally
+  file:
+    src: /usr/share/composer/vendor/bin/drush
+    dest: /usr/bin/drush
+    state: link
+    force: yes
+  sudo: true
+
+- name: prepare user .drush directory
+  file:
+    path: /home/{{ user }}/.drush
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: yes
+

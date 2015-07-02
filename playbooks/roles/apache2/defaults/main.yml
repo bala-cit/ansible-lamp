@@ -1,0 +1,14 @@
+---
+# apache defaults
+
+# Http port
+http_port: 80
+
+# Site specifications
+admin_email: webmaster@yoursite.com
+
+# Web server host alias
+# webserver_hostname_aliases
+# webserver_hostname
+
+# Server tuninig

@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+<VirtualHost *:{{ http_port }}>
+  ServerAdmin {{ admin_email }}
+  ServerName {{ webserver_hostname }}
+{% for alias in webserver_hostname_aliases %}
+  ServerAlias	{{ alias }}
+{% endfor %}
+
+  DocumentRoot /var/www/site/{{ webserver_hostname }}
+
+  <Directory /var/www/site/{{ webserver_hostname }}>
+    Options FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  </Directory>
+
+  ErrorLog /var/www/site/logs/{{ webserver_hostname }}-error.log
+
+  LogLevel warn
+  CustomLog /var/www/site/logs/{{ webserver_hostname }}-access.log combined
+</VirtualHost>

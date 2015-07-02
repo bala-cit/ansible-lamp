@@ -1,0 +1,14 @@
+---
+# Apache2 for Ubuntu Trusty
+
+- include: apache2_install.yml
+
+- name: create site folder if not exists
+  command: mkdir -p /var/www/site
+  sudo: true
+
+- include: apache2_create-site.yml
+  when: webserver_hostname is defined
+
+- include: apache2_ssl_create-site.yml
+  when: webserver_hostname is defined and enable_ssl

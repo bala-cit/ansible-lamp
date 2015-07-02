@@ -1,0 +1,13 @@
+; INI-like format inventory setting file - https://docs.ansible.com/intro_inventory.htm
+; Names in brackets are groups, which are used in classifying systems and deciding what 
+; systems you are controlling at what times and for what purpose.
+
+; This is used by SSH, if the port is not default SSH port, need to specify it, e.g: <ip>:<port>
+
+; Web servers where the apache, php and etc will be installed and configured
+[webservers]
+192.168.3.173
+
+; Database server where mySql will be installed and configured
+[dbservers]
+192.168.3.174

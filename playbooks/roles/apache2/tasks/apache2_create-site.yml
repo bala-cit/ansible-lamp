@@ -1,0 +1,17 @@
+---
+
+- name: create {{ webserver_hostname }} under /var/www/site directory
+  command: mkdir -p /var/www/site/{{ webserver_hostname }}
+  sudo: true
+
+- name: add vhosts configuration to sites-available folder
+  template: src=apache2_vhosts.j2 dest=/etc/apache2/sites-available/{{ webserver_hostname }}.conf
+  sudo: true
+  notify:
+    - restart apache2
+
+- name: enable {{ webserver_hostname }} site
+  command: a2ensite {{ webserver_hostname }} creates=/etc/apache2/sites-enabled/{{ webserver_hostname }}.conf
+  sudo: true
+  notify:
+    - restart apache2

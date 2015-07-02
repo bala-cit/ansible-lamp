@@ -1,0 +1,4 @@
+---
+
+- name: list home directory
+  command: /bin/ls ~

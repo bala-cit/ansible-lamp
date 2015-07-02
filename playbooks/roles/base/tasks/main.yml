@@ -1,0 +1,9 @@
+---
+# Base operations before proceed configuration
+
+- name: set permissions to /tmp directory
+  file: path=/tmp mode=0777 recurse=yes
+  sudo: yes
+
+- apt: update_cache=yes
+  sudo: true

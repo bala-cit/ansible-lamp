@@ -1,0 +1,10 @@
+---
+# This is a example for site settings, copy and rename it to site specific configurations
+# and change the below variables for the site
+
+# Variables
+
+# Apache2
+webserver_hostname: dpl.ciandt.cn
+http_port: 80
+admin_email: webmaster@dpl.ciandt.cn

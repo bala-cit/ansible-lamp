@@ -1,0 +1,21 @@
+---
+# Install Apache2
+- name: install apache2 packages
+  apt: pkg=apache2 state=latest update_cache=yes
+  with_items:
+    - apache2
+    - apache2-mpm-prefork
+    - apache2-utils
+  sudo: true
+
+- name: enable mod rewrite module
+  command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
+  sudo: true
+  notify:
+    - restart apache2
+
+- name: disable apache default site
+  command: a2dissite default removes=/etc/apache2/sites-enabled/000-default
+  sudo: true
+  notify:
+    - restart apache2
