@@ -1,6 +1,7 @@
 ---
 - include: apache2.yml
+- include: mysql.yml
 
-- name: check package installed
-  command: dpkg-query -l {{ package }}
-  register: is_installed
+#- name: check package installed
+#  command: dpkg-query -l {{ package }}
+#  register: is_installed

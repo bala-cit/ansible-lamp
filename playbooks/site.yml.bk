@@ -2,64 +2,24 @@
 # This playbook deploys Lamp stack
 
 - hosts: webservers
-  vars:
-    http_port: 80
-    admin_email: bala@ciandt.com
   remote_user: citadmin
   sudo_user: citadmin
-  
-  tasks:
-  # run apt-get update
-  - apt: update_cache=yes
-    sudo: true
-
-  - name: install apache2
-    apt: pkg=apache2 state=latest update_cache=yes
-    with_items:
-      - apache2
-      - apache2-mpm-prefork
-      - apache2-utils
-    sudo: true
-
-  - name: install php5
-    apt: pkg=php5 state=latest update_cache=yes
-    with_items:
-      - php5
-      - php5-cli
-      - php5-common
-      - php5-dev
-      - php5-gd
-      - php5-gmp
-      - php5-mysql
-      - php5-xmlrpc
-      - php5-mcrypt
-      - php-soap
-      - php-apc
-      - php-pear
-    sudo: true
-    notify:
-      - restart apache2
+ 
+  roles:
+    - base
+    - { role: apache2, webserver_hostname: dpl.ciandt.cn, http_port: 80, admin_mail: bala@ciandt.com, enable_ssl: true, webserver_hostname_aliases: ['dpl.ciandt.cn'] }
+    - { role: php }
+    - { role: drupal, install_drush: true }
 
   handlers:
-    - name: restart apache2
-      service: name=apache2 state=restarted
+    - include: common/handlers/apache2.yml
 
 - hosts: dbservers
   remote_user: citadmin
   sudo_user: citadmin
 
-  tasks:
-  - apt: update_cache=yes
-    sudo: true
-
-  - name: install mysql packages
-    apt: name=mysql-server state=latest update_cache=yes
-    sudo: true
-    with_items:
-      - mysql-common
-      - mysql-client
+  roles:
+    - mysql
 
   handlers:
-    - name: restart mysql
-      service: name=mysqld state=restarted
-      sudo: true
+    - include: common/handlers/mysql.yml

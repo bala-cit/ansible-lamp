@@ -5,15 +5,21 @@
   sudo: true
   notify:
     - restart apache2
+  tags:
+    - createsite
 
 - name: apache_ssl | add vhosts for ssl version
   template: src=apache2_vhosts-ssl.j2 dest=/etc/apache2/sites-available/{{ webserver_hostname }}-ssl.conf
   sudo: true
   notify:
     - restart apache2
+  tags:
+    - createsite
 
 - name: apache_ssl | enable ssl site
   command: a2ensite {{ webserver_hostname }}-ssl creates=/etc/apache2/sites-enabled/{{ webserver_hostname }}-ssl.conf
   sudo: true
   notify:
-    - restart apache2 
+    - restart apache2
+  tags:
+    - createsite

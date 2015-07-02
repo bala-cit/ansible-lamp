@@ -1,2 +1,16 @@
----
-# Webservers
+--- 
+# file: webservers.yml
+
+- hosts: webservers
+  remote_user: citadmin
+  sudo_user: citadmin
+ 
+  roles:
+    - base
+    - { role: apache2, webserver_hostname: dpl.ciandt.cn, http_port: 80, admin_mail: bala@ciandt.com, enable_ssl: true, webserver_hostname_aliases: ['dpl.ciandt.cn'] }
+    - { role: php }
+    - { role: drupal, install_drush: true }
+
+  handlers:
+    - include: common/handlers/apache2.yml
+

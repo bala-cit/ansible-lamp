@@ -1,3 +1,4 @@
 ---
 
 - include: drush.yml
+  when: install_drush

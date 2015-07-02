@@ -1,11 +1,26 @@
 ---
+# file: drush.yml
 
+# Install composer if not exists
+- include: composer.yml
+
+# create /usr/share/composer directory if doesn't exist
+- name: ensure /usr/share/composer folder created
+  file: path=/usr/share/composer state=directory mode=0755 
+  sudo: true
+  tags: 
+    - drupal
+
+# download drush if not yet installed
 - name: install drush via composer and run it once
   shell: /usr/local/bin/composer global require --no-progress --no-interaction drush/drush:6.* -d /usr/share/composer; /usr/share/composer/vendor/bin/drush
   args:
     creates: /usr/share/composer/vendor/bin/drush
   sudo: true
+  tags:
+    - drupal
 
+# create a symbel link for drush to make to globally accessible
 - name: make drush globally
   file:
     src: /usr/share/composer/vendor/bin/drush
@@ -13,6 +28,8 @@
     state: link
     force: yes
   sudo: true
+  tags:
+    - drupal
 
 - name: prepare user .drush directory
   file:
@@ -21,4 +38,5 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     recurse: yes
-
+  tags:
+    - drupal

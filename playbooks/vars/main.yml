@@ -1,1 +1,20 @@
 ---
+
+install_apache2: true
+
+install_php5: true
+
+install_phpfpm: false 
+
+install_memcached: true
+
+install_xhprof: false
+
+install_apachesolr: false
+
+install_mysql: true
+
+install_redis: false
+
+install_sendmail: false
+

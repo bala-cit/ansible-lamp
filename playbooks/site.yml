@@ -1,34 +1,6 @@
 ---
+# file: site.yml
 # This playbook deploys Lamp stack
 
-- hosts: webservers
-  remote_user: citadmin
-  sudo_user: citadmin
- 
-  roles:
-    - base
-    - { role: apache2, webserver_hostname: dpl.ciandt.cn, http_port: 80, admin_mail: bala@ciandt.com, enable_ssl: true, webserver_hostname_aliases: ['dpl.ciandt.cn'] }
-    - { role: php }
-
-  handlers:
-    - include: common/handlers/main.yml
-
-- hosts: dbservers
-  remote_user: citadmin
-  sudo_user: citadmin
-
-  tasks:
-  - apt: update_cache=yes
-    sudo: true
-
-  - name: install mysql packages
-    apt: name=mysql-server state=latest update_cache=yes
-    sudo: true
-    with_items:
-      - mysql-common
-      - mysql-client
-
-  handlers:
-    - name: restart mysql
-      service: name=mysqld state=restarted
-      sudo: true
+- include: webservers.yml
+- include: dbservers.yml

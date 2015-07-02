@@ -1,9 +1,13 @@
 ---
 # Base operations before proceed configuration
 
+- name: install curl
+  apt: name=curl state=latest 
+  sudo: true
+
 - name: set permissions to /tmp directory
   file: path=/tmp mode=0777 recurse=yes
-  sudo: yes
+  sudo: true 
 
 - apt: update_cache=yes
   sudo: true

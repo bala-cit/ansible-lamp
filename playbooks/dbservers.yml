@@ -1,0 +1,12 @@
+---
+# file: dbservers.yml
+
+- hosts: dbservers
+  remote_user: citadmin
+  sudo_user: citadmin
+
+  roles:
+    - mysql
+
+  handlers:
+    - include: common/handlers/mysql.yml
