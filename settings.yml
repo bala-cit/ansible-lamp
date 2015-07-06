@@ -1,0 +1,30 @@
+---
+# file: settings.yml
+# Ansible variables settings
+
+webserver_hostname: dpl.ciandt.cn
+webserver_hostname_alias:
+  - dpl.ciandt.cn
+
+http_port: 80
+
+enable_ssl: true
+
+ssl_port: 443
+
+install_nginx: true
+
+# When use nginx as webserver it will uninstall apache2 server
+use_nginx_as_webserver: true
+
+admin_email: bala@ciandt.com
+
+install_drush: true
+
+install_drupal: true
+
+install_php: true
+
+# it's necessary to use git for Drupal to use nginx
+# since we use an existing nginx configuration created for drupal from github
+install_git: true

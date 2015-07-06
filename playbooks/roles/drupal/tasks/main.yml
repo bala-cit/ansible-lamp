@@ -2,3 +2,6 @@
 
 - include: drush.yml
   when: install_drush
+
+- include: nginx.yml
+  when: use_nginx_as_webserver

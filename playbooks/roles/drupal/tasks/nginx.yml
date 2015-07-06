@@ -1,0 +1,58 @@
+---
+# file: roles/drupal/tasks/nginx.yml
+# When nginx is used for Drupal
+# see: nginx + Drupal 7 in Ubuntu 14.04 -> https://github.com/perusio/drupal-with-nginx
+
+- name: nginx | backup default nginx configurations
+  shell: mv /etc/nginx /etc/nginx.old -f
+  sudo: true
+
+- name: nginx | get nginx for drupal specification from github
+  git: repo=https://github.com/perusio/drupal-with-nginx.git dest=/etc/nginx
+  sudo: true
+
+- name: nginx | checkout nginx configuration specific for Drupal 7
+  shell: git checkout D7
+  sudo: true
+  args:
+    chdir: /etc/nginx
+
+- name: nginx | copy nginx site config file from example.com.conf file 
+  shell: cp /etc/nginx/sites-available/example.com.conf /etc/nginx/sites-available/{{ webserver_hostname }}.conf
+  sudo: true
+  notify:
+    - reload nginx
+
+- name: nginx | change few settings for nginx site configuration
+  replace: 
+    backup: yes
+    dest: /etc/nginx/sites-available/{{ webserver_hostname }}.conf 
+    regexp: 'example\.com'
+    replace: '{{ webserver_hostname }}'
+  sudo: true
+  notify:
+    - reload nginx
+
+- name: nginx | set ssl cert path
+  shell: find /etc/nginx/sites-available -type f -name "{{ webserver_hostname }}.conf" -exec sed -i -e 's/example-cert.pem/server.crt/' -e 's/example.key/server.key/' "{}" \;
+  sudo: true
+  notify:
+    - reload nginx
+
+- name: recreate sites-enabled folder if not exists
+  file: path=/etc/nginx/sites-enabled state=directory
+  sudo: true
+
+- name: copy backed up sites configurations
+  shell: cp -r /etc/nginx.old/sites-enabled/* /etc/nginx/sites-enabled/
+  sudo: true
+  ignore_errors: true
+- name: nginx | enable site
+  file: src="/etc/nginx/sites-available/{{ webserver_hostname }}.conf" dest="/etc/nginx/sites-enabled/{{ webserver_hostname }}.conf" state=link force=yes
+  sudo: true
+  notify:
+    - reload nginx
+
+- name: nginx | delete backed up nginx.old folder
+  shell: rm -rf /etc/nginx.old
+  sudo: true

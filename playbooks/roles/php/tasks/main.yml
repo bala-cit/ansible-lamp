@@ -17,6 +17,7 @@
     - php-soap
     - php-apc
     - php-pear
+    - php5-fpm 
   sudo: true 
   notify:
     - restart apache2

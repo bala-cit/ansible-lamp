@@ -1,0 +1,19 @@
+---
+# file: roles/nginx/main.yml
+
+- name: install nginx packages
+  apt: name=nginx state=latest update_cache=yes
+  with_items:
+    - nginx-extras
+  sudo: true 
+
+- name: create sites-enabled folder
+  shell: mkdir -p /etc/nginx/sites-enabled/
+  sudo: true
+
+- name: configure ssl cert path
+  shell: find /etc/nginx/sites-available/ -type f -name "example.com.conf" ! -name "*.bak" -exec sed -i.ssl.bak -e 's/example-cert.pem/server.crt/' -e 's/example.key/server.key/' {} \;
+  sudo: true
+  when: enable_ssl
+  notify:
+    - reload nginx

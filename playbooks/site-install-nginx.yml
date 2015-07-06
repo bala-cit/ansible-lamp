@@ -1,0 +1,27 @@
+---
+# file: site-install-nginx.yml
+# This playbook deploys LNMP stack
+
+- hosts: webservers
+  remote_user: citadmin
+  sudo_user: citadmin
+  vars_files:
+    - "../settings.yml"
+
+  pre_tasks:
+    - name: Uninstall apache2 if exists
+      apt: name=apache2 state=absent
+      with_items:
+        - apache2-utils
+        - apache2-mpm-prefork
+      sudo: true
+      when: use_nginx_as_webserver
+  
+  roles:
+    - base
+    - { role: nginx, when: install_nginx }
+    - { role: php, when: install_php }
+    - { role: drupal, when: install_drupal }
+
+  handlers:
+    - include: common/handlers/nginx.yml
